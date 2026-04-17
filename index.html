@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luna Borgo — Designer</title>
+
+  <!-- ── Anti-FOUC ── -->
+  <script>
+    (function () {
+      var valid = ['dark', 'light', 'fun'];
+      var stored = localStorage.getItem('luna-theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme',
+        (stored && valid.indexOf(stored) !== -1) ? stored : (prefersDark ? 'dark' : 'light'));
+    })();
+  </script>
+
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!--
+    DM Mono   — Medium (500) · all text-transform:uppercase contexts
+    Fraunces  — variable, 500, wonk=1 · headings & display
+    Work Sans — variable · body copy & UI text
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght,wonk@0,9..144,100..900,0..1;1,9..144,100..900,0..1&family=Work+Sans:ital,wght@0,300..600;1,300..400&display=swap" rel="stylesheet">
+
+  <style>
+    /* Local font fallback for previews that block remote fonts */
+    @font-face {
+      font-family: 'Nintendoid 1';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('assets/fonts/nintendoid-1.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'DM Mono';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('assets/fonts/DMMono-400.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'DM Mono';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url('assets/fonts/DMMono-500.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'DM Mono';
+      font-style: italic;
+      font-weight: 400;
+      font-display: swap;
+      src: url('assets/fonts/DMMono-400italic.woff2') format('woff2');
+    }
+
+    /* ─────────────────────────────────────────────
+       TYPOGRAPHY TOKENS
+    ───────────────────────────────────────────── */
+    :root {
+      --font-mono:  'DM Mono',  'Courier New', monospace;
+      --font-serif: 'Fraunces', Georgia, serif;
+      --font-sans:  'Work Sans', system-ui, sans-serif;
+      /* Fraunces optical axes for display use */
+      --serif-display: 'SOFT' 0, 'WONK' 1;
+    }
+
+    /* ─────────────────────────────────────────────
+       COLOR TOKENS
+       Primary:  #9b8fff  (lavender-purple)
+       Accent:   #82e785  (mint green — CTAs only)
+       Text:     #faf3e3  (warm cream)
+    ───────────────────────────────────────────── */
+    :root {
+      /* dark (default) — semantic tokens */
+      --color-bg:      #0e0b09;
+      --color-text:    #faf3e3;
+      --color-surface: #161210;
+      --color-primary: #9b8fff;
+      --color-accent:  #82e785;
+      --color-muted:   #5c5048;
+      --color-border:  #1d1a16;
+      --grain-opacity:             0.22;
+      --grain-blend:               overlay;
+      --scanline-opacity:          0.06;
+      --crt-tracking-opacity:      0.035;
+      --crt-interference-opacity:  0.045;
+      /* primary tonal scale (dark) */
+      --color-primary-100: #e8e5ff;
+      --color-primary-300: #c4bcff;
+      --color-primary-500: #9b8fff;
+      --color-primary-700: #6b5fe8;
+      --color-primary-900: #3d31b0;
+      /* accent tonal scale (dark) */
+      --color-accent-100: #d4f5d5;
+      --color-accent-300: #82e785;
+      --color-accent-500: #52c758;
+      --color-accent-700: #3aaa40;
+      --color-accent-900: #1e6b22;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --color-bg:      #f6f4ff;
+        --color-text:    #120f2a;
+        --color-surface: #ebe7ff;
+        --color-primary: #4e42d0;
+        --color-accent:  #1e9248;
+        --color-muted:   #6e67a8;
+        --color-border:  #cdc8f0;
+        --grain-opacity:             0.05;
+        --grain-blend:               multiply;
+        --scanline-opacity:          0.03;
+        --crt-tracking-opacity:      0.012;
+        --crt-interference-opacity:  0.015;
+        /* primary tonal scale (light) */
+        --color-primary-100: #e8e5ff;
+        --color-primary-300: #9b8fff;
+        --color-primary-500: #6b5fe8;
+        --color-primary-700: #4e42d0;
+        --color-primary-900: #2f2597;
+        /* accent tonal scale (light) */
+        --color-accent-100: #d4f5d5;
+        --color-accent-300: #4fcf57;
+        --color-accent-500: #1e9248;
+        --color-accent-700: #156832;
+        --color-accent-900: #0d4116;
+      }
+    }
+
+    [data-theme="dark"] {
+      --color-bg:      #0e0b09;
+      --color-text:    #faf3e3;
+      --color-surface: #161210;
+      --color-primary: #9b8fff;
+      --color-accent:  #82e785;
+      --color-muted:   #5c5048;
+      --color-border:  #1d1a16;
+      --grain-opacity:             0.22;
+      --grain-blend:               overlay;
+      --scanline-opacity:          0.06;
+      --crt-tracking-opacity:      0.035;
+      --crt-interference-opacity:  0.045;
+      /* primary tonal scale (dark) */
+      --color-primary-100: #e8e5ff;
+      --color-primary-300: #c4bcff;
+      --color-primary-500: #9b8fff;
+      --color-primary-700: #6b5fe8;
+      --color-primary-900: #3d31b0;
+      /* accent tonal scale (dark) */
+      --color-accent-100: #d4f5d5;
+      --color-accent-300: #82e785;
+      --color-accent-500: #52c758;
+      --color-accent-700: #3aaa40;
+      --color-accent-900: #1e6b22;
+    }
+
+    [data-theme="light"] {
+      --color-bg:      #f6f4ff;
+      --color-text:    #120f2a;
+      --color-surface: #ebe7ff;
+      --color-primary: #4e42d0;
+      --color-accent:  #1e9248;
+      --color-muted:   #6e67a8;
+      --color-border:  #cdc8f0;
+      --grain-opacity:             0.05;
+      --grain-blend:               multiply;
+      --scanline-opacity:          0.03;
+      --crt-tracking-opacity:      0.012;
+      --crt-interference-opacity:  0.015;
+      /* primary tonal scale (light) */
+      --color-primary-100: #e8e5ff;
+      --color-primary-300: #9b8fff;
+      --color-primary-500: #6b5fe8;
+      --color-primary-700: #4e42d0;
+      --color-primary-900: #2f2597;
+      /* accent tonal scale (light) */
+      --color-accent-100: #d4f5d5;
+      --color-accent-300: #4fcf57;
+      --color-accent-500: #1e9248;
+      --color-accent-700: #156832;
+      --color-accent-900: #0d4116;
+    }
+
+    [data-theme="fun"] {
+      /* dark surfaces — same as dark theme */
+      --color-bg:      #0e0b09;
+      --color-text:    #faf3e3;
+      --color-surface: #161210;
+      --color-muted:   #5c5048;
+      --color-border:  #1d1a16;
+      --grain-opacity: 0.22;
+      --grain-blend:   overlay;
+      /* inverted roles: green (was accent) → primary, purple (was primary) → accent */
+      --color-primary: #82e785;
+      --color-accent:  #9b8fff;
+      /* primary tonal scale (green — inverted from dark accent) */
+      --color-primary-100: #d4f5d5;
+      --color-primary-300: #82e785;
+      --color-primary-500: #52c758;
+      --color-primary-700: #3aaa40;
+      --color-primary-900: #1e6b22;
+      /* accent tonal scale (purple — inverted from dark primary) */
+      --color-accent-100: #e8e5ff;
+      --color-accent-300: #c4bcff;
+      --color-accent-500: #9b8fff;
+      --color-accent-700: #6b5fe8;
+      --color-accent-900: #3d31b0;
+      /* fun overrides — Nintendoid 1 replaces Fraunces */
+      --font-serif:    'Nintendoid 1', monospace;
+      --serif-display: normal;
+      --cursor-fun-default: url("assets/cursors/Aero Arrow Live Green Cursor.cur"), auto;
+      --cursor-fun-link:    url("assets/cursors/Aero Link Live Green Cursor.cur"), pointer;
+    }
+
+    html[data-theme="fun"],
+    html[data-theme="fun"] body {
+      cursor: var(--cursor-fun-default);
+    }
+
+    html[data-theme="fun"] a,
+    html[data-theme="fun"] button,
+    html[data-theme="fun"] [role="button"],
+    html[data-theme="fun"] .theme-text,
+    html[data-theme="fun"] label[for],
+    html[data-theme="fun"] summary {
+      cursor: var(--cursor-fun-link);
+    }
+
+    /* ─────────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      height: 100%;
+      font-size: 100%;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+
+    body {
+      height: 100%;
+      overflow: hidden;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+
+    /*
+      DM Mono rule — all text-transform: uppercase contexts.
+    */
+    .wordmark, .nav a, .contact-btn, .linkedin-btn,
+    .toggle-label, .section-label, .sidebar-meta,
+    .work-client, .work-year, .image-label, .footer-copy,
+    .main-tagline {
+      font-family: var(--font-mono);
+    }
+
+    /* ─────────────────────────────────────────────
+       GRAIN OVERLAY
+    ───────────────────────────────────────────── */
+    .grain {
+      position: fixed;
+      inset: -10%;
+      width: 120%; height: 120%;
+      pointer-events: none;
+      z-index: 900;
+      opacity: var(--grain-opacity);
+      mix-blend-mode: var(--grain-blend);
+      transition: opacity 0.35s ease;
+      animation: grain-drift 0.5s steps(1) infinite;
+    }
+
+    @keyframes grain-drift {
+      0%   { transform: translate(0, 0);       }
+      20%  { transform: translate(-1.5%, 1%);  }
+      40%  { transform: translate(2%, -1%);    }
+      60%  { transform: translate(-1%, 2%);    }
+      80%  { transform: translate(1.5%, -.5%); }
+      100% { transform: translate(0, 0);       }
+    }
+
+    /* ─────────────────────────────────────────────
+       CRT / VHS TEXTURE
+       scanlines     — fixed 1px lines, below grain
+       tracking      — faint primary-tinted band drifts
+                       top-to-bottom over 90 s
+       interference  — wider band that follows the
+                       mouse Y with a slow lerp,
+                       creating "signal disruption"
+                       where the two bands overlap
+    ───────────────────────────────────────────── */
+    .crt-scanlines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 898;
+      opacity: var(--scanline-opacity);
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 2px,
+        var(--color-text) 2px,
+        var(--color-text) 3px
+      );
+      transition: opacity 0.35s ease;
+    }
+
+    .crt-tracking {
+      position: fixed;
+      left: 0; right: 0;
+      width: 100%;
+      height: 10vh;
+      top: 0;
+      pointer-events: none;
+      z-index: 897;
+      opacity: var(--crt-tracking-opacity);
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--color-primary),
+        transparent
+      );
+      will-change: transform;
+      animation: crt-tracking-drift 90s linear infinite;
+      transition: opacity 0.35s ease;
+    }
+
+    @keyframes crt-tracking-drift {
+      0%   { transform: translateY(-10vh); }
+      100% { transform: translateY(110vh); }
+    }
+
+    .crt-mouse-interference {
+      position: fixed;
+      left: 0; right: 0;
+      width: 100%;
+      height: 18vh;
+      top: 0;
+      transform: translateY(calc(var(--mouse-tracking-y, 50vh) - 9vh));
+      pointer-events: none;
+      z-index: 899;
+      opacity: var(--crt-interference-opacity);
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--color-primary),
+        var(--color-primary),
+        transparent
+      );
+      transition: opacity 0.35s ease;
+    }
+
+    /* ─────────────────────────────────────────────
+       LAYOUT  —  fluid three-column grid
+       0.25fr sidebar | 1fr main | 0.5fr gallery
+    ───────────────────────────────────────────── */
+    .layout {
+      display: grid;
+      grid-template-columns: 0.25fr 1fr 0.5fr;
+      height: 100vh;
+    }
+
+    /* ─────────────────────────────────────────────
+       SIDEBAR
+    ───────────────────────────────────────────── */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 44px 36px;
+      border-right: 1px solid var(--color-border);
+      transition: border-color 0.35s ease;
+    }
+
+    .sidebar-top { display: flex; flex-direction: column; gap: 52px; }
+    .logo-block  { display: flex; flex-direction: column; gap: 16px; }
+
+    .logo-mark {
+      width: 22px; height: 32px;
+      color: var(--color-text);
+      transition: color 0.35s ease;
+    }
+
+    /* DM Mono — uppercase rule */
+    .wordmark {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      opacity: 0.6;
+      transition: color 0.35s ease;
+    }
+
+    .nav { display: flex; flex-direction: column; gap: 12px; }
+
+    /* DM Mono — uppercase rule */
+    .nav a {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      opacity: 0.6;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: opacity 0.25s ease;
+    }
+
+    .nav a:hover  { opacity: 1; }
+    .nav a.active { opacity: 1; }
+
+    .nav a:focus-visible {
+      opacity: 1;
+      outline: 2px solid var(--color-primary);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .nav-dot {
+      width: 4px; height: 4px;
+      border-radius: 2px;
+      background: var(--color-primary);
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .nav a.active .nav-dot { opacity: 1; }
+
+    /* ── Sidebar bottom ── */
+    .sidebar-bottom { display: flex; flex-direction: column; gap: 14px; }
+
+    /* Live moon phase + world times */
+    .sidebar-meta {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      opacity: 0.65;
+      line-height: 1.67;
+      transition: color 0.35s ease;
+    }
+
+    /* Meta row: vertical on desktop, becomes horizontal on mobile */
+    .sidebar-meta-row { display: flex; flex-direction: column; gap: 14px; }
+
+    /* CTA button pair — stacked */
+    .cta-stack { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+
+    /* EMAIL — filled accent with VHS glitch on hover */
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+      padding: 5px 8px;
+      background: var(--color-accent);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: #1d1d1d;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      transition: filter 0.15s, background-color 0.35s ease;
+    }
+
+    .contact-btn:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 2px;
+    }
+
+    /* Scanline overlay on hover */
+    .contact-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 1px,
+        rgba(0, 0, 0, 0.12) 1px,
+        rgba(0, 0, 0, 0.12) 2px
+      );
+      opacity: 0;
+      transition: opacity 0.1s;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .contact-btn:hover::before { opacity: 1; }
+
+    @keyframes vhs-glitch {
+      0%,  88% { filter: none;                                    transform: none;           }
+      89%       { filter: saturate(4) hue-rotate(80deg);          transform: translateX(-2px);}
+      90%       { filter: saturate(4) hue-rotate(-50deg);         transform: translateX(2px); }
+      91%,100%  { filter: none;                                    transform: none;           }
+    }
+
+    .contact-btn:hover { animation: vhs-glitch 1.8s steps(1) infinite; }
+
+    /* LINKEDIN — ghost / semi-transparent */
+    .linkedin-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+      padding: 5px 8px;
+      background: rgba(255, 255, 255, 0.08);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      white-space: nowrap;
+      transition: background-color 0.25s ease, color 0.35s ease;
+    }
+
+    .linkedin-btn:hover { background: rgba(255, 255, 255, 0.14); }
+
+    .linkedin-btn:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    [data-theme="light"] .linkedin-btn { background: rgba(0, 0, 0, 0.06); }
+    [data-theme="light"] .linkedin-btn:hover { background: rgba(0, 0, 0, 0.1); }
+
+    /* Thin divider */
+    .sidebar-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--color-text);
+      opacity: 0.2;
+      transition: background-color 0.35s ease;
+    }
+
+    /* Footer area */
+    .footer-row { display: flex; flex-direction: column; gap: 12px; }
+
+    .footer-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Copyright line */
+    .footer-copy {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      opacity: 0.65;
+      line-height: 1.67;
+      transition: color 0.35s ease;
+    }
+
+    /* ─────────────────────────────────────────────
+       THEME TOGGLE  —  text-only (Dark / Light)
+    ───────────────────────────────────────────── */
+    /* DM Mono — uppercase rule */
+    .theme-text,
+    .theme-sep {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      opacity: 0.65;
+      transition: opacity 0.25s ease, color 0.25s ease;
+    }
+
+    .theme-text {
+      appearance: none;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      line-height: 1;
+      color: inherit;
+    }
+
+    .theme-text:hover { opacity: 0.9; }
+    .theme-text.is-active { opacity: 1; }
+
+    .theme-text:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
+    /* ─────────────────────────────────────────────
+       MAIN CONTENT
+    ───────────────────────────────────────────── */
+    .main {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 42px 40px;
+      border-right: 1px solid var(--color-border);
+      overflow-y: auto;
+      scrollbar-width: none;
+      gap: 2px;
+      transition: border-color 0.35s ease;
+    }
+
+    .main::-webkit-scrollbar { display: none; }
+
+    /* ── Hero ── */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      text-wrap: pretty;
+    }
+
+    /*
+      MAIN TAGLINE — static label replacing the clock strip
+      DM Mono, uppercase, muted
+    */
+    .main-tagline {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      margin-bottom: 42px;
+      transition: color 0.35s ease;
+      opacity: 0;
+      animation: fade-up-muted 0.7s ease 0.1s forwards;
+    }
+
+    /*
+      HERO STATEMENT — Fraunces 500, wonk=1
+      54px / 59.4px leading / -0.81px tracking
+    */
+    .hero-statement {
+      font-family: var(--font-serif);
+      font-variation-settings: var(--serif-display);
+      font-size: 56px;
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.81px;
+      color: var(--color-text);
+      margin-bottom: 28px;
+      max-width: 580px;
+      transition: color 0.35s ease;
+      opacity: 0;
+      animation: fade-up 0.8s ease 0.25s forwards;
+    }
+
+    /* em in purple primary */
+    .hero-statement em {
+      font-style: italic;
+      color: var(--color-primary);
+      transition: color 0.35s ease;
+    }
+
+    [data-theme="fun"] .hero-statement {
+      font-size: 32px;
+      font-weight: 400;
+    }
+
+    [data-theme="fun"] .hero-statement em {
+      font-style: normal;
+    }
+
+    /* Split-flap (fun theme only) — inline spans for hover detection */
+    [data-theme="fun"] .hero-statement span {
+      display: inline;
+      font: inherit;
+      letter-spacing: inherit;
+    }
+
+    /* Ghost tile over the character during a flip — fun theme only */
+    [data-theme="fun"] .flap-ghost {
+      position: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 100;
+      font-family: var(--font-serif);
+      font-variation-settings: var(--serif-display);
+      font-size: 32px;
+      font-weight: 400;
+      letter-spacing: -0.81px;
+      line-height: 1;
+      background: var(--color-bg);
+    }
+
+    /* Work Sans body — 16px, -0.3px tracking */
+    .hero-sub {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.55;
+      letter-spacing: -0.3px;
+      color: var(--color-text);
+      max-width: 560px;
+      transition: color 0.35s ease;
+      opacity: 0;
+      animation: fade-up 0.8s ease 0.4s forwards;
+    }
+
+    [data-theme="fun"] .hero-sub {
+      font-family: var(--font-serif);
+      letter-spacing: 0;
+    }
+
+    /* ── Selected Work ── */
+    .work-section {
+      padding-top: 56px;
+      opacity: 0;
+      animation: fade-up 0.8s ease 0.55s forwards;
+    }
+
+    /* DM Mono — uppercase rule */
+    .section-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      opacity: 0.6;
+      margin-bottom: 22px;
+      transition: color 0.35s ease;
+    }
+
+    .work-list { display: flex; flex-direction: column; }
+
+    .work-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-top: 1px solid var(--color-border);
+      text-decoration: none;
+      transition: border-color 0.35s ease;
+    }
+
+    .work-item:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+
+    .work-item:last-child { border-bottom: 1px solid var(--color-border); }
+
+    /* Fraunces — project title, purple primary */
+    .work-project {
+      font-family: var(--font-serif);
+      font-variation-settings: var(--serif-display);
+      font-size: 16px;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--color-primary);
+      flex: 1;
+      transition: color 0.25s ease;
+    }
+
+    .work-item:hover .work-project { color: var(--color-text); }
+
+    [data-theme="fun"] .work-project {
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    /* Right side meta: CLIENT / YEAR */
+    .work-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    /* DM Mono — uppercase rule */
+    .work-client,
+    .work-year {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      opacity: 0.6;
+      white-space: nowrap;
+      transition: color 0.25s ease, opacity 0.25s ease;
+    }
+
+    .work-item:hover .work-client,
+    .work-item:hover .work-year { opacity: 1; }
+
+    /* 2×2px square separator dot */
+    .work-dot {
+      width: 2px; height: 2px;
+      background: var(--color-text);
+      opacity: 0.6;
+      flex-shrink: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .work-item:hover .work-dot { opacity: 1; }
+
+    /* ─────────────────────────────────────────────
+       IMAGE COLUMN  (dither ↔ colour)
+    ───────────────────────────────────────────── */
+    .images {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      height: 100vh;
+      background: var(--color-border);
+      transition: background-color 0.35s ease;
+    }
+
+    .image-card {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Full-colour layer — always present at the bottom */
+    .image-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center top;
+      transform: none !important;
+    }
+
+    /*
+      Pre-dithered layer — artist-prepared Bayer image.
+      Sits on top and fades out on hover to reveal colour.
+    */
+    .image-dither {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center top;
+      transform: none !important;
+      transition: opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity;
+      z-index: 1;
+    }
+
+    /* Keep Heineken dither/color perfectly aligned to avoid perceived zoom */
+    .image-card[data-index="1"] .image-bg,
+    .image-card[data-index="1"] .image-dither {
+      background-size: 100% 100%;
+      background-position: center;
+    }
+
+    .image-card.is-active .image-dither { opacity: 0; }
+
+    /* Bottom gradient for label legibility */
+    .image-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.62)  0%,
+        rgba(0, 0, 0, 0.12) 32%,
+        transparent          58%
+      );
+      z-index: 2;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .image-card.is-active::after { opacity: 0.4; }
+
+    /* DM Mono — uppercase rule */
+    .image-label {
+      position: absolute;
+      bottom: 18px;
+      left: 22px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      text-transform: uppercase;
+      color: var(--color-text);
+      opacity: 0.45;
+      z-index: 3;
+      transition: opacity 0.4s ease;
+    }
+
+    .image-card.is-active .image-label { opacity: 0.9; }
+
+    /* ─────────────────────────────────────────────
+       ENTRANCE ANIMATIONS
+    ───────────────────────────────────────────── */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    /* For elements that rest at a reduced opacity after animating in */
+    @keyframes fade-up-muted {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 0.65; transform: translateY(0); }
+    }
+
+    /* ─────────────────────────────────────────────
+       REDUCED MOTION
+    ───────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .grain { animation: none; }
+      .crt-tracking { animation: none; }
+
+      .hero-statement,
+      .hero-sub,
+      .work-section {
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
+
+      .main-tagline {
+        opacity: 0.65;
+        transform: none;
+        animation: none;
+      }
+
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    ::-webkit-scrollbar { width: 0; }
+
+    /* ─────────────────────────────────────────────
+       TABLET / SMALL DESKTOP  —  below 1300px
+       Images column moves below Selected Work
+       as a horizontal strip
+    ───────────────────────────────────────────── */
+    @media (max-width: 1299px) {
+      body {
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .layout {
+        grid-template-columns: 0.25fr 1fr;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      /* Sidebar stays sticky */
+      .sidebar {
+        grid-column: 1;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+
+      .sidebar::-webkit-scrollbar { display: none; }
+
+      /* Main content: row 1, col 2 */
+      .main {
+        grid-column: 2;
+        overflow-y: visible;
+        height: auto;
+        border-right: none;
+      }
+
+      /* Hide images entirely below 1300px */
+      .images {
+        display: none;
+      }
+
+      .hero-statement { font-size: 48px; }
+
+      [data-theme="fun"] .hero-statement { font-size: 32px; }
+    }
+
+    /* ─────────────────────────────────────────────
+       MOBILE  —  below 768px
+       Sidebar splits into top header + bottom footer
+       Single-column scrollable layout
+    ───────────────────────────────────────────── */
+    @media (max-width: 767px) {
+      body {
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      /* Flex column — sidebar children participate directly */
+      .layout {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      /* Break sidebar out of flow so sidebar-top and sidebar-bottom
+         become direct flex children of .layout */
+      .sidebar {
+        display: contents;
+      }
+
+      /* ── Header bar ── */
+      .sidebar-top {
+        order: -1;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0;
+        padding: 20px 24px;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        background: var(--color-bg);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        transition: background-color 0.35s ease, border-color 0.35s ease;
+      }
+
+      /* Logo + wordmark side by side */
+      .logo-block {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+      }
+
+      /* Nav links horizontal */
+      .nav {
+        flex-direction: row;
+        gap: 20px;
+      }
+
+      /* ── Main content ── */
+      .main {
+        order: 0;
+        border-right: none;
+        overflow-y: visible;
+        height: auto;
+        padding: 32px 24px;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .hero-statement { font-size: 40px; }
+
+      [data-theme="fun"] .hero-statement { font-size: 32px; }
+
+      /* Hide images on mobile */
+      .images {
+        display: none;
+      }
+
+      /* ── Footer bar ── */
+      .sidebar-bottom {
+        order: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px 24px;
+        border-right: none;
+        border-top: none;
+        width: 100%;
+      }
+
+      /* Meta row: moon + clock + CTAs all in one horizontal line */
+      .sidebar-meta-row {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      /* Moon and clock grow to fill available space */
+      #sidebar-moon { flex-shrink: 0; }
+      #sidebar-clock { flex: 1; min-width: 0; }
+
+      /* CTAs side-by-side */
+      .cta-stack {
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+        flex-shrink: 0;
+      }
+
+      /* Divider hidden on mobile (replaced by meta-row layout) */
+      .sidebar-divider { display: none; }
+
+      /* Footer row: copyright + toggle stacked */
+      .footer-row { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Film grain ── -->
+  <svg class="grain" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#noise)"/>
+  </svg>
+
+  <!-- ── CRT / VHS texture ── -->
+  <div class="crt-scanlines"          aria-hidden="true"></div>
+  <div class="crt-tracking"           aria-hidden="true"></div>
+  <div class="crt-mouse-interference" aria-hidden="true"></div>
+
+  <div class="layout">
+
+    <!-- ────────────────── SIDEBAR ────────────────── -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+
+        <div class="logo-block">
+          <!--
+            8-bit pixel crescent moon — 22×32 display size.
+            C-shaped waning crescent, 4×4 px pixel grid.
+          -->
+          <svg class="logo-mark" viewBox="0 0 22 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8"  y="0"  width="4" height="4" fill="currentColor"/>
+            <rect x="12" y="0"  width="4" height="4" fill="currentColor"/>
+            <rect x="4"  y="4"  width="4" height="4" fill="currentColor"/>
+            <rect x="8"  y="4"  width="4" height="4" fill="currentColor"/>
+            <rect x="0"  y="8"  width="4" height="4" fill="currentColor"/>
+            <rect x="4"  y="8"  width="4" height="4" fill="currentColor"/>
+            <rect x="0"  y="12" width="4" height="4" fill="currentColor"/>
+            <rect x="0"  y="16" width="4" height="4" fill="currentColor"/>
+            <rect x="0"  y="20" width="4" height="4" fill="currentColor"/>
+            <rect x="4"  y="20" width="4" height="4" fill="currentColor"/>
+            <rect x="4"  y="24" width="4" height="4" fill="currentColor"/>
+            <rect x="8"  y="24" width="4" height="4" fill="currentColor"/>
+            <rect x="8"  y="28" width="4" height="4" fill="currentColor"/>
+            <rect x="12" y="28" width="4" height="4" fill="currentColor"/>
+          </svg>
+          <!-- DM Mono — uppercase rule -->
+          <div class="wordmark">Luna</div>
+        </div>
+
+        <nav class="nav" aria-label="Primary">
+          <a href="index.html" class="active" aria-current="page"><span class="nav-dot" aria-hidden="true"></span><span class="nav-label">Work</span></a>
+          <a href="about.html">About</a>
+          <a href="pong.html">P_NG</a>
+        </nav>
+
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-meta-row">
+          <!-- Live moon phase — updated by JS -->
+          <p class="sidebar-meta" id="sidebar-moon" aria-label="Moon phase">&nbsp;</p>
+          <!-- Live world times — updated by JS -->
+          <p class="sidebar-meta" id="sidebar-clock" aria-label="World times">&nbsp;</p>
+
+          <!-- CTA pair -->
+          <div class="cta-stack">
+            <a href="mailto:hello@lunaborgo.com" class="contact-btn">EMAIL ↗</a>
+            <a href="https://linkedin.com/in/lunaborgo" class="linkedin-btn" target="_blank" rel="noopener">LINKEDIN ↗</a>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="sidebar-divider" aria-hidden="true"></div>
+
+        <div class="footer-row">
+          <!-- DARK [toggle] LIGHT -->
+          <div class="footer-meta">
+            <button type="button" class="theme-text" data-theme="dark" aria-pressed="false">Dark</button>
+            <span class="theme-sep" aria-hidden="true">/</span>
+            <button type="button" class="theme-text" data-theme="light" aria-pressed="false">Light</button>
+            <span class="theme-sep" aria-hidden="true">/</span>
+            <button type="button" class="theme-text" data-theme="fun" aria-pressed="false">=^,^=</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ────────────────── MAIN ────────────────── -->
+    <main class="main">
+
+      <div class="hero">
+        <!-- Static tagline — DM Mono uppercase -->
+        <p class="main-tagline">Ab anno 2012 — vel 2004. Quis scit?</p>
+
+        <!-- Fraunces 500 wonk=1 — 56px display headline -->
+        <h1 class="hero-statement">
+          I build the systems behind brands and teams that need to move at scale —
+          <em>without losing their soul.</em>
+        </h1>
+
+        <!-- Work Sans body — 16px, 60% opacity, -1px tracking -->
+        <p class="hero-sub">
+          For the past twelve years, I've shaped digital platforms and design
+          systems where brand strategy, product, and organizational structure
+          intersect.
+        </p>
+      </div>
+
+      <section class="work-section" id="work" aria-label="Selected work">
+        <!-- DM Mono — uppercase rule -->
+        <p class="section-label">Selected Work</p>
+
+        <div class="work-list">
+
+          <a class="work-item" href="#" data-image="1">
+            <!-- Fraunces italic purple -->
+            <span class="work-project">eazle B2B Platform</span>
+            <!-- DM Mono client · year -->
+            <div class="work-meta" aria-label="Heineken, 2022 to 2026">
+              <span class="work-client">Heineken</span>
+              <span class="work-dot" aria-hidden="true"></span>
+              <span class="work-year">2022–2026</span>
+            </div>
+          </a>
+
+          <a class="work-item" href="#" data-image="2">
+            <span class="work-project">Crate Design System</span>
+            <div class="work-meta" aria-label="Heineken, 2022 to 2026">
+              <span class="work-client">Heineken</span>
+              <span class="work-dot" aria-hidden="true"></span>
+              <span class="work-year">2022–2026</span>
+            </div>
+          </a>
+
+          <a class="work-item" href="#" data-image="3">
+            <span class="work-project">Product Recommendations</span>
+            <div class="work-meta" aria-label="Adidas, 2019 to 2022">
+              <span class="work-client">Adidas</span>
+              <span class="work-dot" aria-hidden="true"></span>
+              <span class="work-year">2019–2022</span>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ────────────────── IMAGE COLUMN ────────────────── -->
+    <div class="images" role="presentation">
+
+      <div class="image-card" data-index="1">
+        <div class="image-bg"     style="background-image: url('Images/Heineken.png')"></div>
+        <div class="image-dither" style="background-image: url('Images/heineken_d.png')" aria-hidden="true"></div>
+        <span class="image-label">B2B Platform · 40+ Markets</span>
+      </div>
+
+      <div class="image-card" data-index="2">
+        <div class="image-bg"     style="background-image: url('Images/Crate.png')"></div>
+        <div class="image-dither" style="background-image: url('Images/Crate_d.png')" aria-hidden="true"></div>
+        <span class="image-label">Design System · 235 Contributors</span>
+      </div>
+
+      <div class="image-card" data-index="3">
+        <div class="image-bg"     style="background-image: url('Images/Adidas.png')"></div>
+        <div class="image-dither" style="background-image: url('Images/Adidas_d.png')" aria-hidden="true"></div>
+        <span class="image-label">€3.69M Net Sales · One Interaction</span>
+      </div>
+
+    </div>
+
+  </div><!-- /.layout -->
+
+  <script>
+    /* ── Theme toggle ────────────────────────────────────────────── */
+    const html   = document.documentElement;
+    const themeButtons = document.querySelectorAll('.theme-text[data-theme]');
+
+    function applyTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('luna-theme', theme);
+      const isLight = theme === 'light';
+      themeButtons.forEach(btn => {
+        const btnTheme = btn.getAttribute('data-theme');
+        const active = btnTheme === theme;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    }
+
+    applyTheme(html.getAttribute('data-theme') || 'dark');
+
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const next = btn.getAttribute('data-theme');
+        if (next) applyTheme(next);
+      });
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('luna-theme'))
+        applyTheme(e.matches ? 'dark' : 'light');
+    });
+
+    /* ── Live moon phase + world times (sidebar) ─────────────────── */
+    const moonSymbols = ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
+    const moonLabels  = [
+      'new moon', 'waxing crescent', 'first quarter', 'waxing gibbous',
+      'full moon', 'waning gibbous',  'last quarter',  'waning crescent'
+    ];
+
+    function getMoonPhase() {
+      // Reference new moon: 2025-01-29 12:36 UTC
+      const refNewMoon = new Date('2025-01-29T12:36:00Z');
+      const synodicMs  = 29.530588853 * 24 * 60 * 60 * 1000;
+      const elapsed    = ((Date.now() - refNewMoon.getTime()) % synodicMs + synodicMs) % synodicMs;
+      const idx        = Math.floor((elapsed / synodicMs) * 8) % 8;
+      return { symbol: moonSymbols[idx], label: moonLabels[idx] };
+    }
+
+    function fmt(tz) {
+      return new Date().toLocaleTimeString('en-GB', {
+        hour: '2-digit', minute: '2-digit', timeZone: tz
+      });
+    }
+
+    function updateSidebarClock() {
+      const moonEl  = document.getElementById('sidebar-moon');
+      const clockEl = document.getElementById('sidebar-clock');
+      if (!moonEl || !clockEl) return;
+
+      const { symbol, label } = getMoonPhase();
+      moonEl.textContent  = symbol + ' ' + label;
+      clockEl.textContent =
+        fmt('Europe/Amsterdam')  + ' AMS'
+        + ' / ' + fmt('America/Sao_Paulo') + ' VIX'
+        + ' / ' + fmt('Asia/Tokyo')         + ' JPN';
+    }
+
+    updateSidebarClock();
+    setInterval(updateSidebarClock, 30000);
+
+    /* ── Work item ↔ image card interaction ─────────────────────── */
+    const workItems  = document.querySelectorAll('.work-item');
+    const imageCards = document.querySelectorAll('.image-card');
+
+    workItems.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        const idx = item.dataset.image;
+        imageCards.forEach(card =>
+          card.classList.toggle('is-active', card.dataset.index === idx)
+        );
+        item.classList.add('is-active');
+      });
+      item.addEventListener('mouseleave', () => {
+        imageCards.forEach(card => card.classList.remove('is-active'));
+        item.classList.remove('is-active');
+      });
+    });
+
+    /* ── Split-flap headline (fun theme only) ─────────────────────────────
+       Wraps each character of .hero-statement in a <span>, then on hover
+       runs a mechanical flip sequence. Disabled for dark/light; restored
+       when switching to fun. Preserves <em> styling throughout.
+    ─────────────────────────────────────────────────────────────────────── */
+    (function () {
+      const html = document.documentElement;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const FLIP_UPPER  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!#@?%&*<>';
+      const FLIP_LOWER  = 'abcdefghijklmnopqrstuvwxyz!#@?%&*<>';
+      const IS_LETTER   = /[a-zA-Z]/;
+      const HOVER_DELAY = 80;
+      const DELAYS      = [130, 100, 75, 50, 30];
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const hero = document.querySelector('.hero-statement');
+        if (!hero) return;
+
+        const heroOriginalHtml = hero.innerHTML;
+        const animating     = new Set();
+        const pendingTimers = new Map();
+        let flapActive = false;
+
+        function randChar(original) {
+          const pool = (original === original.toUpperCase()) ? FLIP_UPPER : FLIP_LOWER;
+          return pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        function flipSpan(span) {
+          if (animating.has(span)) return;
+          animating.add(span);
+          const original = span.dataset.char;
+
+          const rect  = span.getBoundingClientRect();
+          const ghost = document.createElement('span');
+          ghost.className      = 'flap-ghost';
+          ghost.style.left     = rect.left   + 'px';
+          ghost.style.top      = rect.top    + 'px';
+          ghost.style.width    = rect.width  + 'px';
+          ghost.style.height   = rect.height + 'px';
+          ghost.style.fontSize = window.getComputedStyle(span).fontSize;
+          ghost.style.color    = span.closest('em') ? 'var(--color-primary)' : 'var(--color-text)';
+          document.body.appendChild(ghost);
+
+          let frame = 0;
+
+          function step() {
+            if (frame < DELAYS.length) {
+              ghost.textContent = randChar(original);
+              const wait = DELAYS[frame];
+              frame++;
+              setTimeout(step, wait);
+            } else {
+              ghost.remove();
+              animating.delete(span);
+            }
+          }
+
+          step();
+        }
+
+        function wrapTextNode(textNode) {
+          const frag = document.createDocumentFragment();
+          for (const ch of textNode.textContent) {
+            const span = document.createElement('span');
+            span.dataset.char = ch;
+            span.textContent  = ch;
+            if (!IS_LETTER.test(ch)) span.dataset.static = 'true';
+            frag.appendChild(span);
+          }
+          textNode.parentNode.replaceChild(frag, textNode);
+        }
+
+        function wrapChildren(el) {
+          Array.from(el.childNodes).forEach(function (node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+              wrapTextNode(node);
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+              wrapChildren(node);
+            }
+          });
+        }
+
+        function onHeroMouseLeave() {
+          pendingTimers.forEach(function (timer) { clearTimeout(timer); });
+          pendingTimers.clear();
+          document.querySelectorAll('.flap-ghost').forEach(function (g) { g.remove(); });
+          animating.clear();
+        }
+
+        function setupFlap() {
+          if (reduced || flapActive) return;
+          wrapChildren(hero);
+
+          const letterSpans = Array.from(
+            hero.querySelectorAll('span:not([data-static])')
+          );
+
+          letterSpans.forEach(function (span) {
+            span.addEventListener('mouseenter', function () {
+              const timer = setTimeout(function () {
+                pendingTimers.delete(span);
+                flipSpan(span);
+              }, HOVER_DELAY);
+              pendingTimers.set(span, timer);
+            });
+
+            span.addEventListener('mouseleave', function () {
+              const t = pendingTimers.get(span);
+              if (t !== undefined) {
+                clearTimeout(t);
+                pendingTimers.delete(span);
+              }
+            });
+          });
+
+          hero.addEventListener('mouseleave', onHeroMouseLeave);
+          flapActive = true;
+        }
+
+        function teardownFlap() {
+          if (!flapActive) return;
+          hero.removeEventListener('mouseleave', onHeroMouseLeave);
+          pendingTimers.forEach(function (timer) { clearTimeout(timer); });
+          pendingTimers.clear();
+          document.querySelectorAll('.flap-ghost').forEach(function (g) { g.remove(); });
+          animating.clear();
+          hero.innerHTML = heroOriginalHtml;
+          flapActive = false;
+        }
+
+        function syncFlapToTheme() {
+          if (reduced) return;
+          if (html.getAttribute('data-theme') === 'fun') setupFlap();
+          else teardownFlap();
+        }
+
+        new MutationObserver(syncFlapToTheme).observe(html, {
+          attributes: true,
+          attributeFilter: ['data-theme']
+        });
+        syncFlapToTheme();
+      });
+    }());
+  </script>
+
+  <!-- ── CRT mouse-interference tracker ── -->
+  <script>
+    (function () {
+      var root    = document.documentElement;
+      var mouseY  = window.innerHeight * 0.5;
+      var lerpY   = mouseY;
+      /* Slow lerp for full motion; instant for reduced-motion users */
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var lerpT   = reduced ? 1 : 0.04;
+
+      document.addEventListener('mousemove', function (e) {
+        mouseY = e.clientY;
+      });
+
+      function tick() {
+        lerpY += (mouseY - lerpY) * lerpT;
+        root.style.setProperty('--mouse-tracking-y', lerpY.toFixed(1) + 'px');
+        requestAnimationFrame(tick);
+      }
+
+      root.style.setProperty('--mouse-tracking-y', lerpY + 'px');
+      requestAnimationFrame(tick);
+    }());
+  </script>
+
+</body>
+</html>

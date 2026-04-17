@@ -1,0 +1,167 @@
+---
+description: Design token and UI consistency rules for Luna Borgo's portfolio site. Enforces correct CSS custom property usage, tonal color scale, font assignment, contrast standards, focus styles, and motion patterns whenever editing the site HTML files.
+globs:
+  - index.html
+  - about.html
+---
+
+# Portfolio Design System Rules
+
+Apply these rules whenever editing `index.html` or `about.html`.
+
+---
+
+## 1. Always Use CSS Custom Properties
+
+**Never write a raw hex or rgb value in a `<style>` block.** Use the token.
+
+### Semantic color tokens
+
+| Token | Dark | Light | Role |
+|---|---|---|---|
+| `--color-bg` | `#0e0b09` | `#f6f4ff` | Page background |
+| `--color-text` | `#faf3e3` | `#120f2a` | Primary text and icon color |
+| `--color-surface` | `#161210` | `#ebe7ff` | Card / elevated surface background |
+| `--color-primary` | `#9b8fff` | `#4e42d0` | Brand accent — headings, links, active states, focus rings |
+| `--color-accent` | `#82e785` | `#1e9248` | CTA-only accent — filled button background |
+| `--color-muted` | `#5c5048` | `#6e67a8` | Toggle thumb, secondary borders, decorative UI |
+| `--color-border` | `#1d1a16` | `#cdc8f0` | Dividers, card borders |
+
+> ⚠️ Light-mode primary is `#4e42d0`. The old value `#6b5fe8` failed WCAG AA contrast (~4.4:1). Do NOT revert it.
+
+### Tonal color scale
+
+When a semantic token is too heavy or too light, pick the nearest tonal step. **Always prefer a semantic token first; use tonal steps only when a deliberate shade variation is needed.**
+
+**Primary (purple)**
+
+| Token | Dark | Light |
+|---|---|---|
+| `--color-primary-100` | `#e8e5ff` | `#e8e5ff` |
+| `--color-primary-300` | `#c4bcff` | `#9b8fff` |
+| `--color-primary-500` | `#9b8fff` | `#6b5fe8` |
+| `--color-primary-700` | `#6b5fe8` | `#4e42d0` |
+| `--color-primary-900` | `#3d31b0` | `#2f2597` |
+
+**Accent (green)**
+
+| Token | Dark | Light |
+|---|---|---|
+| `--color-accent-100` | `#d4f5d5` | `#d4f5d5` |
+| `--color-accent-300` | `#82e785` | `#4fcf57` |
+| `--color-accent-500` | `#52c758` | `#1e9248` |
+| `--color-accent-700` | `#3aaa40` | `#156832` |
+| `--color-accent-900` | `#1e6b22` | `#0d4116` |
+
+**Permitted hardcoded values (narrow exceptions):**
+- `color: #1d1d1d` on `.contact-btn` — fixed dark text on bright green accent, no suitable token
+- `fill="…"` attributes inside `<svg>` elements that represent brand decorations (vinyl labels, pixel art)
+
+### Typography tokens
+
+| Token | Value |
+|---|---|
+| `--font-sans` | `'Work Sans', system-ui, sans-serif` |
+| `--font-serif` | `'Fraunces', Georgia, serif` |
+| `--font-mono` | `'DM Mono', 'Courier New', monospace` |
+| `--serif-display` | `'SOFT' 0, 'WONK' 1` (font-variation-settings for Fraunces) |
+
+---
+
+## 2. Font Assignment Rule
+
+| If the text is… | Use |
+|---|---|
+| `text-transform: uppercase` | `var(--font-mono)` — always, no exceptions |
+| A heading, display line, or italic decorative text | `var(--font-serif)` + `font-variation-settings: var(--serif-display)` |
+| Body copy, UI labels that are NOT uppercase, meta text | `var(--font-sans)` |
+
+### Mono tracking rule
+
+All mono / uppercase UI text uses **0px letter-spacing** (no tracking).
+
+---
+
+## 3. Opacity Floors
+
+Do not set opacity below these values on text-bearing elements:
+
+| Element type | Minimum opacity |
+|---|---|
+| Running body paragraphs | `0.78` |
+| UI labels, muted text, toggle labels, footer | `0.65` |
+| Decorative image labels (on dark gradient overlay only) | `0.45` |
+| **Nothing text-bearing goes below `0.45`** | |
+
+---
+
+## 4. Font Size Minimums
+
+| Context | Minimum |
+|---|---|
+| All UI text | `11px` |
+| Decorative image labels (on dark overlay) | `10px` — only this exception |
+
+Do not introduce new text elements smaller than `11px`.
+
+---
+
+## 5. Every New Interactive Element Needs a Focus Style
+
+Any new `<a>`, `<button>`, or focusable element must include:
+
+```css
+.element:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;     /* 3–4px for block rows, 2px for inline */
+  border-radius: 2px;
+}
+```
+
+Exception: `.contact-btn` uses `var(--color-text)` for the outline because the accent background needs higher-contrast focus ring.
+
+---
+
+## 6. Entrance Animations Need a Reduced-Motion Override
+
+If you add a new element that starts hidden with `opacity: 0` and animates in, you must add an override in the existing `@media (prefers-reduced-motion: reduce)` block:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  .new-element {
+    opacity: 1;       /* or the final resting opacity */
+    transform: none;
+    animation: none;
+  }
+}
+```
+
+The grain SVG animation (`grain-drift`) must also remain suppressed in that block.
+
+---
+
+## 7. Theme Token Consistency
+
+Color tokens must be defined in three places and kept in sync:
+
+1. `:root` (dark default)
+2. `@media (prefers-color-scheme: light) :root`
+3. `[data-theme="light"]` and `[data-theme="dark"]` explicit selectors
+
+This applies to **both** semantic tokens and tonal scale tokens. When editing a token value, update all four occurrences (both HTML files share the same token set and must stay identical).
+
+---
+
+## 8. Theme Hierarchy
+
+**Dark and light are the primary themes.** All design changes apply to them first.
+
+**Fun (`data-theme="fun"`) is a supplemental theme.** Unless a change is explicitly labelled "fun only":
+- Apply the change to dark and light only.
+- Exception: if you change `--color-primary`, `--color-accent`, or either tonal scale, also update the inverted mapping in `[data-theme="fun"]` to keep it correct.
+- Fun-only changes touch only `[data-theme="fun"]` and its scoped rules — never the dark/light blocks.
+
+## Reference
+
+Full documentation: `Design System.md` (in workspace root)
+Brand voice and visual direction: `Personal Brand.md` (in workspace root)
