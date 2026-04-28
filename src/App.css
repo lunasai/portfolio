@@ -1,0 +1,1477 @@
+.page {
+  width: 100%;
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(200px, 16.6667vw) 1fr;
+  min-height: 100vh;
+  align-items: start;
+}
+
+.page-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.side-menu {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  border-right: 1px solid var(--line);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.side-brand {
+  position: absolute;
+  top: 40px;
+  left: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Figma: moon bottom at 4212, luna top at 4228 → 16px gap */
+  gap: 16px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.brand-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  image-rendering: pixelated;
+  background-color: rgba(255, 255, 255, 0.8);
+  -webkit-mask: url('/figma/luna-logo.svg') no-repeat center / contain;
+  mask: url('/figma/luna-logo.svg') no-repeat center / contain;
+}
+
+[data-theme="light"] .brand-icon {
+  background-color: var(--accent);
+}
+
+.brand-name {
+  /* fill opacity 0.8 = var(--muted) */
+  color: var(--muted);
+  /* Press Start 2P = same author as Nintendoid 1, same NES pixel aesthetic */
+  font: 400 8px/12px 'Press Start 2P', var(--font-mono);
+  letter-spacing: 2.38px;
+  text-transform: uppercase;
+}
+
+.menu-links {
+  position: absolute;
+  top: 135.5px;
+  left: 32px;
+  width: 139px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.menu-links a,
+.menu-btn {
+  text-decoration: none;
+  color: var(--muted);
+  font: 500 12px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.menu-work {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-work-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  flex: 0 0 auto;
+  display: none;
+}
+
+/* Active nav item — full ink colour + dot visible */
+.menu-btn.is-active {
+  color: var(--ink);
+}
+
+.menu-btn.is-active .menu-work-dot {
+  display: block;
+}
+
+.side-footer {
+  position: absolute;
+  left: 32px;
+  bottom: 40px;
+  width: 175px;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-footer p,
+.theme-toggle span {
+  font: 500 12px/15px var(--font-mono);
+  text-transform: uppercase;
+  margin: 0;
+  /* Figma: fill opacity 0.8 */
+  color: var(--muted);
+}
+
+.contact-btn {
+  font: 500 12px/15px var(--font-mono);
+  text-transform: uppercase;
+}
+
+/* Figma: wanning crescent → 12px gap → times */
+.side-footer .moon-phase {
+  margin-bottom: 12px;
+  font-size: 10px;
+}
+
+/* Figma: times → 18px gap → contact */
+.side-footer .times {
+  margin-bottom: 18px;
+  font: 500 10px/15px var(--font-mono);
+}
+
+.contact-btn {
+  border: 0;
+  background: var(--accent);
+  color: var(--accent-fg);
+  padding: 12px 16px;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  display: block;
+  /* Figma: contact → 39px → theme divider */
+  margin-bottom: 39px;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.contact-btn:hover {
+  box-shadow: 6px 6px 0 var(--accent-shadow);
+  transform: translate(-2px, -2px);
+}
+
+.theme-toggle {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  display: flex;
+  gap: 16px;
+  width: fit-content;
+}
+
+.theme-btn {
+  font: 500 12px/15px var(--font-mono);
+  text-transform: uppercase;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.theme-btn.is-active {
+  opacity: 1;
+  color: var(--ink);
+}
+
+.content {
+  padding: 40px;
+  position: relative;
+}
+
+/* ── View switching ─────────────────────────────────────────────────────── */
+/* On mobile: views stack, transition via opacity+translate */
+.view {
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px);
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Hidden views take no space */
+  position: absolute;
+  inset: 0;
+  padding: 40px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.view::-webkit-scrollbar { display: none; }
+
+.view.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  position: relative;
+  inset: auto;
+  overflow: visible;
+  padding: 0;
+}
+
+/* ── Case study content ─────────────────────────────────────────────────── */
+.cs-header {
+  flex-shrink: 0;
+}
+
+.cs-title {
+  margin: 16px 0 0;
+  font: 300 32px/38.4px var(--font-serif);
+  font-variation-settings: 'opsz' 144, 'wght' 300;
+  letter-spacing: -0.5px;
+  color: var(--muted);
+  max-width: 536px;
+}
+
+.cs-body {
+  margin-top: 32px;
+  max-width: 536px;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.cs-body::-webkit-scrollbar { display: none; }
+
+.cs-para {
+  font: 400 14px/22px var(--font-mono);
+  color: var(--muted-48);
+  margin-bottom: 20px;
+  white-space: pre-line;
+}
+
+.cs-para:last-child { margin-bottom: 0; }
+
+.cs-tags {
+  margin-top: 24px;
+  flex-shrink: 0;
+  font: 500 12px/18px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--muted-48);
+}
+
+.cs-dot { color: var(--muted-48); }
+
+.cs-nav {
+  margin-top: 24px;
+  flex-shrink: 0;
+  padding-bottom: 40px;
+  display: flex;
+  gap: 32px;
+}
+
+/* Desktop: show text-column nav, hide the post-images one */
+.cs-nav-mobile { display: none; }
+
+.cs-nav-btn {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: 500 12px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.cs-nav-btn:hover { opacity: 0.6; }
+
+.intro {
+  width: 100%;
+  max-width: 1120px;
+  min-height: 457px;
+}
+
+.kicker {
+  margin: 0;
+  /* Figma: node opacity 0.6 × fill opacity 0.8 = 0.48 */
+  color: var(--muted-48);
+  text-transform: uppercase;
+  font: 500 14px/18.228px var(--font-mono);
+}
+
+/* Home intro kicker: high specificity + child combinator so it wins over @media .kicker rules */
+.view-home > header.intro > p.kicker {
+  font: 500 10px/15.624px var(--font-mono);
+}
+
+.hero-copy {
+  margin: 0;
+  width: 100%;
+  max-width: 1120px;
+  font: 300 48px/57.6px var(--font-serif);
+  font-style: normal;
+  color: var(--muted);
+  letter-spacing: -1px;
+  /* opsz 144 = display optical size, matches Figma's large heading appearance */
+  font-variation-settings: 'opsz' 144, 'wght' 300;
+}
+
+.hero-copy-primary {
+  margin-top: 33px;
+}
+
+.hero-copy-secondary {
+  margin-top: 36px;
+}
+
+/* "without losing their soul." — Fraunces Light Italic, accent purple */
+.hero-copy em {
+  font-style: italic;
+  color: var(--accent-light);
+  font-variation-settings: 'opsz' 144, 'wght' 300;
+}
+
+.work {
+  display: grid;
+  gap: 48px;
+  grid-template-columns: minmax(420px, 536px) minmax(420px, 536px);
+  margin-top: 40px;
+}
+
+.work-list {
+  margin-top: 0;
+  padding-bottom: 40px;
+}
+
+.work-list .kicker {
+  margin: 0;
+  height: 27px;
+  font-size: 14px;
+  line-height: 18.228px;
+  opacity: 0.6;
+}
+
+.work-item {
+  border-top: 1px solid var(--line);
+  padding: 12px 0;
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  column-gap: 16px;
+  align-items: start;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.work-item.is-active {
+  opacity: 1;
+}
+
+.work-item.is-active .work-title {
+  color: var(--accent);
+}
+
+.work-client,
+.work-years {
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.work-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.work-title {
+  margin: 0;
+  max-width: 400px;
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.work-media {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 0;
+}
+
+.work-media-spacer {
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.media-card {
+  margin: 0;
+  width: 100%;
+  max-width: 536px;
+  height: 357.333px;
+  background: var(--bg);
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  /* default: b/w + 20% opacity */
+  filter: grayscale(1);
+  opacity: 0.2;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.media-card.is-active {
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+.media-card img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Inline per-case-study image (mobile only, hidden by default) */
+.work-item-image {
+  display: none;
+}
+
+/* Mobile/tablet footer — hidden on desktop */
+.site-footer {
+  display: none;
+}
+
+.site-footer-inner {
+  padding: 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.site-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.site-footer-row span {
+  font: 500 10px/12px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--accent-fg);
+  letter-spacing: 0.02em;
+}
+
+.site-footer-divider {
+  height: 1px;
+  background: var(--accent-divider);
+}
+
+/* Footer always sits on accent background — buttons must stay white in both modes */
+.site-footer .theme-btn {
+  color: var(--accent-border);
+  opacity: 1;
+}
+
+.site-footer .theme-btn.is-active {
+  color: var(--accent-fg);
+  opacity: 1;
+}
+
+.site-footer .site-footer-row span {
+  color: var(--accent-fg);
+}
+
+/* ── Desktop: page locked to viewport, images column independently scrollable ── */
+@media (min-width: 769px) {
+  html:not(.about-mode), body:not(.about-mode) {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  #root {
+    height: 100%;
+  }
+
+  .page {
+    height: 100vh;
+    overflow: hidden;
+    align-items: stretch;
+  }
+
+  .side-menu {
+    align-self: start;
+    z-index: 20;
+  }
+
+  .page-body {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content {
+    flex: 1;
+    min-height: 0;
+    /* clip instead of hidden: contains the abs-positioned image column
+       but does not create a scroll container, so work-list padding-bottom is visible */
+    overflow: clip;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* intro: sits on top of images, no background so faded images show through on the right */
+  .intro {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    padding-bottom: 40px;
+    background: transparent;
+  }
+
+  /* work section: single column (work-list only, work-media is absolutely positioned) */
+  .work {
+    flex: 1;
+    min-height: 0;
+    display: block;
+    margin-top: 0;
+    position: relative;
+    z-index: 2;
+    max-width: 536px;
+  }
+
+  /* Images column: absolutely positioned from content top to bottom.
+     A JS-measured spacer pushes images down to their initial position (work section level).
+     As user scrolls, previous image slides up behind the headline. */
+  .work-media {
+    position: absolute;
+    top: 0;
+    right: 40px;
+    width: calc(50% - 64px);
+    height: 100%;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .work-media::-webkit-scrollbar {
+    display: none;
+  }
+
+  .media-card {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    max-width: none;
+    /* Fill exactly the visible area below the spacer at any viewport height */
+    height: calc(100% - var(--spacer-h, 537px));
+    aspect-ratio: unset;
+  }
+
+  /* Case-study mode: images start at top with fixed 357px height, all fully visible */
+  .work-media.cs-mode {
+    scroll-snap-type: y mandatory;
+  }
+
+  .work-media.cs-mode .media-card {
+    /* Exact Figma height: 357px per image, 24px gap already set on .work-media */
+    height: 357px;
+    opacity: 1;
+    filter: none;
+    transition: none;
+  }
+}
+
+@media (min-width: 1680px) {
+  .page {
+    grid-template-columns: 320px 1fr;
+  }
+
+  .page-body {
+    min-height: 100vh;
+  }
+
+  .content {
+    padding-inline: 40px;
+  }
+
+  .intro,
+  .hero-copy {
+    max-width: 1520px;
+  }
+
+  .work {
+    grid-template-columns: minmax(520px, 1fr) minmax(520px, 1fr);
+    max-width: 1520px;
+  }
+
+  .media-card {
+    max-width: 100%;
+    height: 357.333px;
+  }
+}
+
+@media (max-width: 1439px) and (min-width: 1200px) {
+  .page {
+    grid-template-columns: 240px 1fr;
+  }
+
+  .content {
+    padding: 40px;
+  }
+
+  .work {
+    grid-template-columns: minmax(360px, 536px) minmax(360px, 536px);
+  }
+}
+
+@media (max-width: 1199px) and (min-width: 769px) {
+  .page {
+    grid-template-columns: 200px 1fr;
+  }
+
+  .content {
+    padding: 40px;
+  }
+
+  .intro {
+    max-width: 920px;
+    min-height: 385px;
+  }
+
+  .kicker {
+    font-size: 10px;
+    line-height: 15.624px;
+  }
+
+  .hero-copy {
+    max-width: 920px;
+    font-size: 48px;
+    line-height: 57.6px;
+  }
+
+  .work {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    max-width: 920px;
+  }
+
+  .work-list .kicker,
+  .work-client,
+  .work-years,
+  .work-title,
+  .menu-links a,
+  .menu-btn {
+    font-size: 12px;
+    line-height: 15.624px;
+  }
+
+  .work-item {
+    grid-template-columns: 80px 1fr;
+  }
+
+  .work-title {
+    max-width: 340px;
+  }
+}
+
+/* ── About page ── */
+
+/* Allow body scroll; overflow-x is handled on <html> so the nav can stay sticky. */
+.page-about {
+  overflow-y: auto;
+  height: auto;
+  min-height: 100vh;
+}
+
+@media (min-width: 769px) {
+  .page-about .site-footer {
+    display: none;
+  }
+}
+
+.about-page {
+  display: grid;
+  grid-template-columns: 1fr 442px;
+  grid-template-rows: 1fr auto;
+  min-height: 100vh;
+  padding: 40px 40px 0;
+  gap: 0 40px;
+  position: relative;
+}
+
+/* Left column */
+.about-left {
+  grid-column: 1;
+  grid-row: 1;
+  padding-bottom: 80px;
+  max-width: 677px;
+}
+
+.about-ascii {
+  font: 500 14px/18px var(--font-mono);
+  color: var(--accent-light);
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin-bottom: 16px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.about-hi {
+  margin: 0 0 12px;
+  font: 500 10px/13.02px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--muted-48);
+}
+
+.about-title {
+  margin: 0 0 32px;
+  font: 300 48px/57.6px var(--font-serif);
+  font-variation-settings: 'opsz' 144, 'wght' 300;
+  color: var(--ink);
+}
+
+.about-bio {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.about-bio p {
+  margin: 0;
+  font: 300 16px/24px var(--font-mono);
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.about-tagline {
+  display: inline-block;
+  margin-bottom: 40px;
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--accent-light);
+  text-decoration: none;
+}
+
+.about-tagline:hover { text-decoration: underline; }
+
+.about-section-kicker {
+  margin: 0 0 16px;
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--muted-48);
+}
+
+.about-exp {
+  list-style: none;
+  margin: 0 0 32px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-exp-item {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+}
+
+.about-exp-years {
+  color: var(--ink);
+}
+
+.about-exp-role {
+  color: var(--ink);
+}
+
+.about-cv-btn {
+  display: inline-block;
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.about-cv-btn:hover { opacity: 0.6; }
+
+/* Right column */
+.about-right {
+  grid-column: 2;
+  grid-row: 1;
+  border-left: 1px solid var(--line);
+  padding-left: 40px;
+  padding-bottom: 80px;
+}
+
+.about-right-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-top: 8px;
+}
+
+.about-panel-kicker {
+  margin: 0 0 16px;
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--muted-48);
+}
+
+.about-photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.about-photos img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
+
+.about-quote {
+  margin: 0;
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--accent-light);
+}
+
+.about-credits {
+  margin: 0;
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--accent-light);
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+.about-credits a {
+  color: var(--accent-light);
+  text-decoration: none;
+}
+
+.about-credits a:hover { text-decoration: underline; }
+
+/* Bottom bar — sticky to viewport bottom */
+.about-bottom {
+  position: sticky;
+  bottom: 0;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  border-top: 1px solid var(--line);
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: var(--bg);
+  z-index: 10;
+}
+
+.about-bottom-btn {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.about-bottom-btn:hover { opacity: 0.6; }
+
+.about-pong-btn {
+  display: inline-block;
+  background: var(--green);
+  border: 0;
+  padding: 8px 16px;
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--green-fg);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.about-pong-btn:hover { opacity: 0.8; }
+
+@media (max-width: 768px) {
+  /* Block layout: a fixed <aside> does not reserve a grid row (Grid would). */
+  .page {
+    display: block;
+    min-height: auto;
+  }
+
+  .page-body {
+    min-height: auto;
+    /* Offset the fixed top bar; safe area included (body top padding is 0 on mobile). */
+    padding-top: calc(68px + env(safe-area-inset-top, 0px));
+    /* Clip wide content here — must NOT be on html/body/.page or fixed nav breaks. */
+    overflow-x: clip;
+  }
+
+  .site-footer {
+    display: block;
+    background: var(--accent);
+    width: 100%;
+  }
+
+  .side-menu {
+    /* !important: win over any stray rules; fixed must not be under a scrollport ancestor */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: env(safe-area-inset-top, 0px) max(40px, env(safe-area-inset-right, 0px)) 0
+      max(40px, env(safe-area-inset-left, 0px));
+    min-height: calc(68px + env(safe-area-inset-top, 0px));
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    overflow: visible;
+    background: var(--bg);
+    z-index: 200;
+  }
+
+  .side-brand {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .menu-links {
+    position: static;
+    flex-direction: row;
+    flex: 1;
+    padding-left: 20px;
+    align-items: center;
+    gap: 16px;
+    width: auto;
+  }
+
+  .menu-work-dot {
+    display: inline-block;
+  }
+
+  .side-footer {
+    display: flex;
+    position: static;
+    left: auto;
+    bottom: auto;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .side-footer .moon-phase,
+  .side-footer .times,
+  .side-footer .theme-toggle {
+    display: none;
+  }
+
+  .contact-btn {
+    width: auto;
+    white-space: nowrap;
+    margin-bottom: 0;
+    display: inline-block;
+  }
+
+  .content {
+    padding: 40px;
+  }
+
+  .intro {
+    max-width: 688px;
+    min-height: auto;
+  }
+
+  .kicker {
+    font-size: 10px;
+    line-height: 15.624px;
+  }
+
+  .hero-copy {
+    max-width: 688px;
+    font-size: 40px;
+    line-height: 120%;
+  }
+
+  .work {
+    margin-top: 32px;
+    grid-template-columns: 1fr;
+    max-width: 688px;
+    gap: 24px;
+  }
+
+  .work-list {
+    margin-top: 0;
+  }
+
+  .work-item {
+    grid-template-columns: 80px 1fr;
+    column-gap: 16px;
+  }
+
+  .work-media {
+    margin-top: 0;
+  }
+
+  /* Collapse the JS-driven desktop spacer — no offset needed on mobile */
+  .work-media-spacer {
+    display: none;
+  }
+
+  /* Case-study images on mobile: show below the text, full-width stack */
+  .work-media.cs-mode {
+    display: flex;
+    position: static;
+    width: 100%;
+    height: auto;
+    overflow-y: visible;
+    scroll-snap-type: none;
+    padding: 24px 0 0;
+    gap: 16px;
+  }
+
+  .work-media.cs-mode .media-card {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    opacity: 1;
+    filter: none;
+    scroll-snap-align: none;
+  }
+
+  /* On mobile the whole page scrolls; don't confine body to a sub-scroll area */
+  .cs-body {
+    overflow-y: visible;
+    flex: none;
+    max-width: 100%;
+  }
+
+  .cs-title {
+    max-width: 100%;
+  }
+
+  /* Swap nav positions: hide desktop (in-text) nav, show post-images nav */
+  .cs-nav-desktop { display: none; }
+  .cs-nav-mobile {
+    display: flex;
+    padding: 24px 40px 40px;
+    gap: 32px;
+  }
+
+  .media-card {
+    max-width: 688px;
+    height: auto;
+    aspect-ratio: 688 / 428;
+  }
+
+  /* ── About page — mobile (≤768px) ── */
+  .about-page {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    padding: 24px 24px 0;
+    gap: 0;
+    min-height: auto;
+  }
+
+  .about-left {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 100%;
+    padding-bottom: 32px;
+  }
+
+  .about-ascii {
+    font-size: 9px;
+    line-height: 13px;
+    margin-bottom: 12px;
+  }
+
+  .about-hi {
+    margin-bottom: 8px;
+  }
+
+  .about-title {
+    font-size: 32px;
+    line-height: 38px;
+    margin-bottom: 20px;
+  }
+
+  .about-bio {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .about-bio p {
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .about-tagline {
+    margin-bottom: 28px;
+  }
+
+  .about-section-kicker {
+    margin-bottom: 8px;
+  }
+
+  .about-right {
+    grid-column: 1;
+    grid-row: 2;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding-left: 0;
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+
+  /* Square photos on mobile — fills more of the screen */
+  .about-photos {
+    gap: 4px;
+  }
+
+  .about-photos img {
+    aspect-ratio: 1 / 1;
+  }
+
+  .about-right-inner {
+    gap: 32px;
+  }
+
+  .about-bottom {
+    grid-column: 1;
+    grid-row: 3;
+    position: static;
+    padding: 16px 0 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .side-menu {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    min-height: calc(68px + env(safe-area-inset-top, 0px));
+    height: auto;
+  }
+
+  .side-brand {
+    position: static;
+  }
+
+  .menu-links {
+    position: static;
+    padding-left: 12px;
+    gap: 12px;
+  }
+
+  .content {
+    padding: 40px 16px 24px;
+  }
+
+  .intro {
+    max-width: 343px;
+  }
+
+  .hero-copy {
+    max-width: 343px;
+    font-size: 32px;
+    line-height: 38px;
+  }
+
+  .work {
+    max-width: 343px;
+    margin-top: 24px;
+  }
+
+  .work-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Hide homepage image column (replaced by inline work-item images) */
+  .work-media:not(.cs-mode) {
+    display: none;
+  }
+
+  /* Keep case-study images visible — inherit the 768px rules */
+  .work-media.cs-mode {
+    padding: 16px 0 0;
+    gap: 12px;
+  }
+
+  .cs-nav-mobile {
+    padding: 20px 16px 32px;
+  }
+
+  .work-item {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0;
+    row-gap: 8px;
+    padding: 0;
+    border-top: none;
+    opacity: 0.6;
+  }
+
+  .work-item-image {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    aspect-ratio: 343 / 229;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  .work-item-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    opacity: 0.2;
+  }
+
+  /* Expose years + title directly into the work-item grid */
+  .work-copy {
+    display: contents;
+  }
+
+  .work-years {
+    grid-column: 2;
+    text-align: right;
+    font-size: 12px;
+    line-height: 15.624px;
+  }
+
+  .work-title {
+    grid-column: 1 / -1;
+    max-width: none;
+    font-size: 12px;
+    line-height: 15.624px;
+    margin: 0;
+  }
+
+  .work-client {
+    font-size: 12px;
+    line-height: 15.624px;
+  }
+
+  .media-card {
+    max-width: 343px;
+    aspect-ratio: 343 / 229;
+  }
+
+  /* ── About page — small mobile (≤480px) ── */
+  .about-page {
+    padding: 16px 16px 0;
+  }
+
+  .about-ascii {
+    font-size: 8px;
+    line-height: 11px;
+  }
+
+  .about-title {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  .about-exp-item {
+    grid-template-columns: 72px 1fr;
+    gap: 8px;
+  }
+}
+
+/* ── Contact popup ── */
+.contact-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.contact-modal {
+  background: var(--accent);
+  width: 100%;
+  max-width: 1064px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+}
+
+/* Header row: X CLOSE right-aligned */
+.contact-modal-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.contact-close {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: 500 14px/18.228px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--accent-fg);
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s ease;
+}
+
+.contact-close:hover { opacity: 0.6; }
+
+/* Body: Fraunces text */
+.contact-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.contact-hey,
+.contact-msg,
+.contact-cta {
+  margin: 0;
+  font: 300 40px/48px var(--font-serif);
+  font-variation-settings: 'opsz' 144, 'wght' 300;
+  color: var(--accent-fg);
+}
+
+/* Email: white pill with accent text, inline */
+.contact-email {
+  display: inline;
+  background: var(--accent-surface);
+  color: var(--accent);
+  padding: 0 4px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.contact-email:hover { opacity: 0.75; }
+
+/* Buttons */
+.contact-modal-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* Figma: outer frame rgba(white,0.32) fill, inner frame accent fill — 2px gap between */
+.contact-action-btn {
+  display: inline-block;
+  font: 500 16px/21px var(--font-mono);
+  text-transform: uppercase;
+  color: var(--accent-fg);
+  text-decoration: none;
+  background: var(--accent);
+  border: 2px solid var(--accent-border);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.contact-action-btn:hover {
+  box-shadow: 6px 6px 0 var(--accent-border);
+  transform: translate(-2px, -2px);
+}
+
+/* Footer: ascii cat + sig */
+.contact-modal-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.contact-cat {
+  margin: 0;
+  font: 500 15px/20px var(--font-mono);
+  color: var(--accent-subtle);
+  white-space: pre;
+}
+
+.contact-sig {
+  margin: 0;
+  font: 300 40px/48px var(--font-serif);
+  font-variation-settings: 'opsz' 144, 'wght' 300;
+  color: var(--accent-fg);
+}
+
+/* ── Contact popup — mobile full-screen ── */
+@media (max-width: 768px) {
+  .contact-overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .contact-modal {
+    height: 100%;
+    overflow-y: auto;
+    padding: 32px 24px;
+    justify-content: space-between;
+  }
+
+  .contact-hey,
+  .contact-msg,
+  .contact-cta {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .contact-sig {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .contact-modal-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .contact-modal-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+  }
+
+  .contact-cat {
+    font-size: 12px;
+    line-height: 16px;
+    text-align: right;
+  }
+}

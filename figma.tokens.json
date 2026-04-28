@@ -1,0 +1,100 @@
+{
+  "meta": {
+    "project": "Luna Borgo Portfolio",
+    "source": "https://www.figma.com/design/FHLbpeVmVdQ8DAtXvSeh2S/portfolio_web?node-id=2-4401",
+    "nodeId": "71:39474",
+    "status": "extracted"
+  },
+  "breakpoints": [
+    {
+      "name": "breakpoint=1201+",
+      "width": 1440,
+      "height": 917
+    },
+    {
+      "name": "breakpoint=1200",
+      "width": 1200,
+      "height": 917
+    },
+    {
+      "name": "breakpoint=768",
+      "width": 768,
+      "height": 1026
+    },
+    {
+      "name": "breakpoint=375",
+      "width": 375,
+      "height": 1847
+    }
+  ],
+  "colors": [
+    "#FFFFFFCC",
+    "#FFFFFF14",
+    "#FFFFFFFF",
+    "#000000FF",
+    "#5543E4FF",
+    "#121426FF",
+    "#8A8AFFFF"
+  ],
+  "typography": [
+    {
+      "fontFamily": "DM Mono",
+      "fontWeight": 500,
+      "fontSize": 12,
+      "lineHeightPx": 15.624000549316406,
+      "letterSpacing": 0,
+      "textCase": "UPPER"
+    },
+    {
+      "fontFamily": "DM Mono",
+      "fontWeight": 500,
+      "fontSize": 14,
+      "lineHeightPx": 18.22800064086914,
+      "letterSpacing": 0,
+      "textCase": "UPPER"
+    },
+    {
+      "fontFamily": "Fraunces",
+      "fontWeight": 300,
+      "fontSize": 48,
+      "lineHeightPx": 57.60000228881836,
+      "letterSpacing": -1
+    },
+    {
+      "fontFamily": "Nintendoid 1",
+      "fontWeight": 400,
+      "fontSize": 12,
+      "lineHeightPx": 12,
+      "letterSpacing": 2.380000114440918,
+      "textCase": "UPPER"
+    }
+  ],
+  "spacing": [
+    6,
+    8,
+    12,
+    16,
+    20,
+    24,
+    32,
+    40,
+    48
+  ],
+  "radii": [
+    2
+  ],
+  "shadows": []
+}
+{
+  "meta": {
+    "project": "Luna Borgo Portfolio",
+    "source": "https://www.figma.com/design/FHLbpeVmVdQ8DAtXvSeh2S/portfolio_web?node-id=2-4401",
+    "status": "placeholder"
+  },
+  "colors": {},
+  "typography": {},
+  "spacing": {},
+  "radii": {},
+  "shadows": {},
+  "breakpoints": {}
+}

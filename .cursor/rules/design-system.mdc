@@ -19,31 +19,32 @@ Apply these rules whenever editing `index.html` or `about.html`.
 
 | Token | Dark | Light | Role |
 |---|---|---|---|
-| `--color-bg` | `#0e0b09` | `#f6f4ff` | Page background |
+| `--color-bg` | `#09070d` | `#f3f1ff` | Page background |
 | `--color-text` | `#faf3e3` | `#120f2a` | Primary text and icon color |
-| `--color-surface` | `#161210` | `#ebe7ff` | Card / elevated surface background |
-| `--color-primary` | `#9b8fff` | `#4e42d0` | Brand accent — headings, links, active states, focus rings |
-| `--color-accent` | `#82e785` | `#1e9248` | CTA-only accent — filled button background |
-| `--color-muted` | `#5c5048` | `#6e67a8` | Toggle thumb, secondary borders, decorative UI |
-| `--color-border` | `#1d1a16` | `#cdc8f0` | Dividers, card borders |
+| `--color-surface` | `#100d1f` | `#e6e1ff` | Card / elevated surface background |
+| `--color-primary` | `#5543e4` | `#3627c7` | Headings, links, active states, CTA fill, focus rings |
+| `--color-accent` | `#82e785` | `#1e9248` | Fun theme / decorative only |
+| `--color-muted` | `#3d3660` | `#6e67a8` | Toggle thumb, secondary borders, decorative UI |
+| `--color-border` | `rgba(255,255,255,0.08)` | `rgba(0,0,0,0.08)` | Dividers, card borders |
+| `--color-fg-on-accent` | `#ffffff` | `#ffffff` | Text/icons on filled primary button |
 
-> ⚠️ Light-mode primary is `#4e42d0`. The old value `#6b5fe8` failed WCAG AA contrast (~4.4:1). Do NOT revert it.
+> ⚠️ Light-mode primary is `#3627c7`. Darker than dark-mode primary for WCAG AA compliance on light bg. Do NOT revert.
 
 ### Tonal color scale
 
 When a semantic token is too heavy or too light, pick the nearest tonal step. **Always prefer a semantic token first; use tonal steps only when a deliberate shade variation is needed.**
 
-**Primary (purple)**
+**Primary (indigo)**
 
 | Token | Dark | Light |
 |---|---|---|
-| `--color-primary-100` | `#e8e5ff` | `#e8e5ff` |
-| `--color-primary-300` | `#c4bcff` | `#9b8fff` |
-| `--color-primary-500` | `#9b8fff` | `#6b5fe8` |
-| `--color-primary-700` | `#6b5fe8` | `#4e42d0` |
-| `--color-primary-900` | `#3d31b0` | `#2f2597` |
+| `--color-primary-100` | `#ccc5ff` | `#e8e5ff` |
+| `--color-primary-300` | `#9d8dff` | `#b0a5ff` |
+| `--color-primary-500` | `#5543e4` | `#7065e8` |
+| `--color-primary-700` | `#3627c7` | `#3627c7` |
+| `--color-primary-900` | `#22177a` | `#1d1490` |
 
-**Accent (green)**
+**Accent (green — fun theme / decorative)**
 
 | Token | Dark | Light |
 |---|---|---|
@@ -54,7 +55,6 @@ When a semantic token is too heavy or too light, pick the nearest tonal step. **
 | `--color-accent-900` | `#1e6b22` | `#0d4116` |
 
 **Permitted hardcoded values (narrow exceptions):**
-- `color: #1d1d1d` on `.contact-btn` — fixed dark text on bright green accent, no suitable token
 - `fill="…"` attributes inside `<svg>` elements that represent brand decorations (vinyl labels, pixel art)
 
 ### Typography tokens
@@ -90,8 +90,7 @@ Do not set opacity below these values on text-bearing elements:
 |---|---|
 | Running body paragraphs | `0.78` |
 | UI labels, muted text, toggle labels, footer | `0.65` |
-| Decorative image labels (on dark gradient overlay only) | `0.45` |
-| **Nothing text-bearing goes below `0.45`** | |
+| **Nothing text-bearing goes below `0.45`** | **—** |
 
 ---
 
@@ -100,7 +99,6 @@ Do not set opacity below these values on text-bearing elements:
 | Context | Minimum |
 |---|---|
 | All UI text | `11px` |
-| Decorative image labels (on dark overlay) | `10px` — only this exception |
 
 Do not introduce new text elements smaller than `11px`.
 
@@ -118,7 +116,7 @@ Any new `<a>`, `<button>`, or focusable element must include:
 }
 ```
 
-Exception: `.contact-btn` uses `var(--color-text)` for the outline because the accent background needs higher-contrast focus ring.
+Exception: `.contact-btn` uses `var(--color-fg-on-accent)` for the outline because it sits on a filled primary background.
 
 ---
 

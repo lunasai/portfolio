@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300&family=Press+Start+2P&family=Work+Sans:wght@300&display=swap');
+
+:root {
+  /* ── Surface & text ── */
+  --bg:       #121426;
+  --ink:      #ffffff;
+  --muted:    rgba(255, 255, 255, 0.80);
+  --muted-48: rgba(255, 255, 255, 0.48);
+  --line:     rgba(255, 255, 255, 0.08);
+
+  /* ── Accent (purple) ── */
+  --accent:         #5543e4;
+  --accent-fg:      #ffffff;                  /* text/icons on accent surface   */
+  --accent-light:   rgb(138, 138, 255);       /* lavender — about page ASCII    */
+  --accent-subtle:  rgba(217, 223, 255, 1);   /* dim text layered on accent     */
+  --accent-border:  rgba(255, 255, 255, 0.32);/* border on accent surface       */
+  --accent-shadow:  rgba(85, 67, 228, 0.40);  /* offset shadow for btns on page bg */
+  --accent-surface: #ffffff;                  /* pill/chip on accent background */
+  --accent-divider: rgba(0, 0, 0, 0.15);      /* rule inside accent blocks      */
+
+  /* ── Green ── */
+  --green:    #8eff8e;
+  --green-fg: #18161d;   /* text on green — dark for contrast on light green */
+
+  /* ── Overlay ── */
+  --overlay: rgba(0, 0, 0, 0.40);
+
+  /* ── Typography ── */
+  --font-mono:  'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans:  'Work Sans', system-ui, sans-serif;
+}
+
+/* ── Light mode — all semantic tokens ── */
+[data-theme="light"] {
+  --bg:       #F7F8FF;
+  --ink:      #09070D;
+  --muted:    rgba(9, 7, 13, 0.80);
+  --muted-48: rgba(9, 7, 13, 0.48);
+  --line:     rgba(9, 7, 13, 0.08);
+
+  /* Accent same hue in both modes; on-accent colors unchanged */
+  --accent-light:  rgb(85, 67, 228);  /* darker lavender for light bg contrast */
+
+  /* Green stays the same in light mode (used only on the pong button) */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Theme transition — only active for the 600ms window while switching.
+   !important overrides element-specific transitions so colours fade smoothly. */
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition:
+    background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    fill 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Do NOT set overflow-x on html/body/#root: it breaks position:fixed for the mobile top bar
+   (WebKit/Blink treat the element as a scrollport; fixed then scrolls with the page). */
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  line-height: 1.4;
+  /* Pads content for notches & home bar when index.html uses viewport-fit=cover */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+/* Safe area is applied on the fixed top bar; avoid double top offset with page-body padding. */
+@media (max-width: 768px) {
+  body {
+    padding-top: 0;
+  }
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 48px;
+  line-height: 1.2;
+  letter-spacing: -1px;
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: clamp(24px, 4vw, 40px);
+  line-height: 1.05;
+}
+
+p {
+  color: var(--ink);
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 36px;
+    line-height: 1.15;
+  }
+}

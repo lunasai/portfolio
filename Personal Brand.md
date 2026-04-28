@@ -439,27 +439,6 @@ In practice: her brand should feel like something grown and something built coex
 
 ---
 
-### Color & contrast
-
-**Direction:**
-- **Anchor in deep warm tones.** The Suno reference on the moodboard — deep magenta rolling into warm copper-orange — is the temperature reference. This is not a purple-tech palette; it is warm, almost sunset, almost biological.
-- **Grain over flat.** No color in this visual system should read as flat fill. Film grain, noise, or texture should be layered over primary tones. The grain is the signature.
-- **High-contrast black-and-white moments.** The retro Mac and "72" reference on the board signal that full desaturation — B/W — is a legitimate mode, not a fallback. Use it for analytical or typographic-dominant moments.
-- **One bold accent.** The pixel red apple on the board: one hyper-saturated moment of color against a neutral or dark ground. Not a palette, a punctuation mark.
-- **Soft atmospheric midtones.** The misty forest/laptop image and the pastoral green landscape provide the quiet register — where the depth lives before the grain hits.
-
-**What to avoid:** Pastel palettes. Blue-dominant tech gradients. "Minimal white with one accent color" portfolios. Anything that looks like Linear, Notion, or a Webflow template.
-
----
-
-### Typography
-
-**Direction:**
-- **Editorial serif + technical sans.** The FLORA AI reference uses an elegant serif headline against clean body text. The "72" and "ALMOST THERE" references show that large, spare numerics and clean sans-serif have a role in the system alongside the more expressive serif.
-- **Name as anchor.** The moodboard includes "Luna" set large in what appears to be a humanist display typeface — the name is a logotype, not just a label. In any layout, her name should be set with typographic intention, not defaulted.
-- **Restraint in hierarchy.** Not many type sizes. Two or three levels, clearly differentiated. The confidence is in what is *not* on the page.
-- **Personality markers.** The chapter-structure of her case studies — "Chapter One," "Chapter Two" — benefits from a serif at a larger size. The metrics callouts benefit from the technical sans, set tight.
-
 **Pairing personality:** Display/editorial serif (humanist, slightly warm — think Canela, Freight Display, or Domaine) paired with a geometric or humanist sans for body and data (Söhne, Inter, or ABC Diatype register). Not Helvetica. Not Circular. Nothing that reads as Swiss-neutral.
 
 ---

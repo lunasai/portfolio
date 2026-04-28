@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "project": "Luna Borgo Portfolio",
+    "fileKey": "FHLbpeVmVdQ8DAtXvSeh2S",
+    "nodeId": "71:39474",
+    "extractedAt": "2026-04-23T16:07:00.619Z"
+  },
+  "breakpoints": [
+    {
+      "id": "17:62445",
+      "name": "breakpoint=1201+",
+      "width": 1440,
+      "height": 917
+    },
+    {
+      "id": "71:39475",
+      "name": "breakpoint=1200",
+      "width": 1200,
+      "height": 917
+    },
+    {
+      "id": "71:39655",
+      "name": "breakpoint=768",
+      "width": 768,
+      "height": 1026
+    },
+    {
+      "id": "71:39931",
+      "name": "breakpoint=375",
+      "width": 375,
+      "height": 1847
+    }
+  ],
+  "colors": [
+    {
+      "value": "#FFFFFFCC",
+      "count": 90
+    },
+    {
+      "value": "#FFFFFF14",
+      "count": 32
+    },
+    {
+      "value": "#FFFFFFFF",
+      "count": 18
+    },
+    {
+      "value": "#000000FF",
+      "count": 12
+    },
+    {
+      "value": "#5543E4FF",
+      "count": 10
+    },
+    {
+      "value": "#121426FF",
+      "count": 8
+    },
+    {
+      "value": "#8A8AFFFF",
+      "count": 4
+    }
+  ],
+  "typography": [
+    {
+      "fontFamily": "DM Mono",
+      "fontWeight": 500,
+      "fontSize": 12,
+      "lineHeightPx": 15.624000549316406,
+      "lineHeightPercent": 100,
+      "letterSpacing": 0,
+      "textCase": "UPPER",
+      "usageCount": 44
+    },
+    {
+      "fontFamily": "DM Mono",
+      "fontWeight": 500,
+      "fontSize": 14,
+      "lineHeightPx": 18.22800064086914,
+      "lineHeightPercent": 100,
+      "letterSpacing": 0,
+      "textCase": "UPPER",
+      "usageCount": 16
+    },
+    {
+      "fontFamily": "DM Mono",
+      "fontWeight": 500,
+      "fontSize": 12,
+      "lineHeightPx": 15,
+      "lineHeightPercent": 96.00614166259766,
+      "letterSpacing": 0,
+      "textCase": "UPPER",
+      "usageCount": 10
+    },
+    {
+      "fontFamily": "DM Mono",
+      "fontWeight": 500,
+      "fontSize": 10,
+      "lineHeightPx": 12,
+      "lineHeightPercent": 92.1658935546875,
+      "letterSpacing": 0,
+      "textCase": "UPPER",
+      "usageCount": 10
+    },
+    {
+      "fontFamily": "Fraunces",
+      "fontWeight": 300,
+      "fontSize": 48,
+      "lineHeightPx": 57.60000228881836,
+      "lineHeightPercent": 97.32360076904297,
+      "letterSpacing": -1,
+      "usageCount": 4
+    },
+    {
+      "fontFamily": "Nintendoid 1",
+      "fontWeight": 400,
+      "fontSize": 12,
+      "lineHeightPx": 12,
+      "lineHeightPercent": 100,
+      "letterSpacing": 2.380000114440918,
+      "textCase": "UPPER",
+      "usageCount": 4
+    }
+  ],
+  "spacing": [
+    6,
+    8,
+    12,
+    16,
+    20,
+    24,
+    32,
+    40,
+    48,
+    655.5
+  ],
+  "radii": [
+    2
+  ],
+  "effects": [],
+  "imageRefCount": 3
+}
