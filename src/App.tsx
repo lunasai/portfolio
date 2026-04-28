@@ -1,6 +1,12 @@
 import { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react'
 import './App.css'
 
+/** Files in `public/` — prefix with BASE_URL for GitHub Pages (/repo-name/). */
+function publicAsset(path: string) {
+  const p = path.startsWith('/') ? path.slice(1) : path
+  return `${import.meta.env.BASE_URL}${p}`
+}
+
 // Measures work-list top offset from content top.
 // Sets spacer height so images initially sit at the work section level,
 // and sets scroll-padding-top so snap targets each image at that same level.
@@ -35,8 +41,12 @@ const projects = [
     client: 'Heineken',
     years: '2022–2026',
     title: "Creating Crate: Heineken's B2B design language used by 225+ team members",
-    image: '/figma/work-1.png',
-    caseImages: ['/figma/cs-heineken.png', '/figma/work-1.png', '/figma/work-2.png'],
+    image: publicAsset('figma/work-1.png'),
+    caseImages: [
+      publicAsset('figma/cs-heineken.png'),
+      publicAsset('figma/work-1.png'),
+      publicAsset('figma/work-2.png'),
+    ],
     slug: 'crate',
     body: "Crate is Heineken's internal design system, powering eazle and a suite of supporting tools. I built Crate from the ground up — tokens, components, patterns, and documentation — alongside a team of engineers and a growing contributor community.\n\nThe system is now used by 235 contributors across 8 product teams and has become the connective tissue for Heineken's digital product organisation.\n\n- Designed and documented 80+ components from scratch\n- Established a token architecture covering brand, theme, and density layers\n- Created onboarding guides and a contribution model that scaled to 235 contributors",
     tags: ['heineken', 'design systems', 'tokens', 'community'],
@@ -45,8 +55,12 @@ const projects = [
     client: 'Heineken',
     years: '2022–2026',
     title: "Building the brand framework and team culture that launched Eazle, Heineken's B2B platform",
-    image: '/figma/work-2.png',
-    caseImages: ['/figma/work-2.png', '/figma/cs-heineken.png', '/figma/work-1.png'],
+    image: publicAsset('figma/work-2.png'),
+    caseImages: [
+      publicAsset('figma/work-2.png'),
+      publicAsset('figma/cs-heineken.png'),
+      publicAsset('figma/work-1.png'),
+    ],
     slug: 'eazle',
     body: "Eazle is Heineken's B2B platform connecting sales reps and customers across markets. I led the brand and product design foundation — defining the visual language, establishing design principles, and building the team culture that made rapid scaling possible.\n\nThe platform launched across 5 markets and is now used by thousands of Heineken sales representatives daily.\n\n- Defined brand expression and visual identity for the platform\n- Built the design team structure and collaboration rituals\n- Created the product design framework used across all Eazle surfaces",
     tags: ['heineken', 'brand', 'product design', 'platform'],
@@ -55,8 +69,12 @@ const projects = [
     client: 'adidas',
     years: '2022–2026',
     title: 'Product Recommendations framework for adidas.com',
-    image: '/figma/work-3.png',
-    caseImages: ['/figma/work-3.png', '/figma/work-2.png', '/figma/work-1.png'],
+    image: publicAsset('figma/work-3.png'),
+    caseImages: [
+      publicAsset('figma/work-3.png'),
+      publicAsset('figma/work-2.png'),
+      publicAsset('figma/work-1.png'),
+    ],
     slug: 'adidas',
     body: "I designed the product recommendations framework for adidas.com — a scalable system that surfaces the right products to the right customers at the right moment across the full commerce experience.\n\nThe framework integrates personalisation signals, editorial control, and performance data into a coherent design system that product teams across adidas can build on.\n\n- Designed recommendation patterns across homepage, PDP, cart and checkout\n- Built a shared component library for recommendation surfaces\n- Worked with data science and engineering teams to balance algorithmic and editorial control",
     tags: ['adidas', 'e-commerce', 'recommendations', 'systems'],
@@ -415,8 +433,8 @@ function App() {
                 <div className="about-panel">
                   <p className="about-panel-kicker">/ photos</p>
                   <div className="about-photos">
-                    <img src="/figma/about-photo-1.png" alt="Luna – photo 1" />
-                    <img src="/figma/about-photo-2.png" alt="Luna – photo 2" />
+                    <img src={publicAsset('figma/about-photo-1.png')} alt="Luna – photo 1" />
+                    <img src={publicAsset('figma/about-photo-2.png')} alt="Luna – photo 2" />
                   </div>
                 </div>
 

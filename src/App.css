@@ -43,8 +43,8 @@
   display: block;
   image-rendering: pixelated;
   background-color: rgba(255, 255, 255, 0.8);
-  -webkit-mask: url('/figma/luna-logo.svg') no-repeat center / contain;
-  mask: url('/figma/luna-logo.svg') no-repeat center / contain;
+  -webkit-mask: var(--brand-icon-mask) no-repeat center / contain;
+  mask: var(--brand-icon-mask) no-repeat center / contain;
 }
 
 [data-theme="light"] .brand-icon {

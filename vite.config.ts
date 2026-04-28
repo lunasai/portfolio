@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// Must match your GitHub repo name for Pages at username.github.io/<repo-name>/
-const githubRepoBase = '/luna-website/'
+// Must match the repo name for project Pages: https://<user>.github.io/<repo>/
+const githubRepoBase = '/portfolio/'
 
 export default defineConfig(({ mode }) => ({
   base: mode === 'production' ? githubRepoBase : '/',
