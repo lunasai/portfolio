@@ -1,6 +1,8 @@
-# Build the Vite app and deploy static output to GitHub Pages.
-# In repo Settings → Pages → Build and deployment: set Source to "GitHub Actions".
-name: Deploy to GitHub Pages
+# Builds the Vite app and commits the static output to docs/ for GitHub Pages.
+#
+# In repo Settings → Pages: Source = Deploy from branch, Branch = main, Folder = /docs
+# (Using / (root) serves the dev index.html and breaks the site.)
+name: Publish site to docs
 
 on:
   push:
@@ -8,38 +10,41 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
+  group: pages-docs
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-sync-docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: pnpm/action-setup@v4
         with:
           version: 9
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: pnpm
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Sync dist → docs (GitHub Pages)
+        run: |
+          rm -rf docs
+          mkdir -p docs
+          cp -r dist/. docs/
+          touch docs/.nojekyll
+
+      - name: Commit docs if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore(pages): sync docs from Vite build [skip ci]'
+          file_pattern: 'docs/'
